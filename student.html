@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ข้อมูลนักเรียน</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">ข้อมูลนักเรียน</h1>
+        <p class="card-subtitle">ตรวจสอบข้อมูลนักเรียนก่อนกรอกข้อมูลผู้ปกครอง</p>
+      </div>
+
+      <div class="card-body">
+        <div id="studentGrid" class="grid grid-2">
+          <div class="box">
+            <b>กำลังดึงข้อมูลจากระบบ...</b>
+            <div class="muted">กรุณารอสักครู่</div>
+          </div>
+        </div>
+
+        <div id="studentMsg" class="msg" style="display:none;"></div>
+
+        <div class="actions">
+          <button id="btnNextToParent" class="btn btn-primary">ถัดไปกรอกข้อมูลผู้ปกครอง</button>
+          <button id="btnBack" class="btn btn-outline">ย้อนกลับ</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
