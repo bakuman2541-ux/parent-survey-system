@@ -20,7 +20,7 @@
 
 *{ box-sizing:border-box; }
 
-html, body { height:100%; }
+html, body { height:100%; width:100%; overflow-x:hidden; }
 
 body{
   margin:0;
@@ -35,9 +35,20 @@ body{
   background-attachment: fixed;
 }
 
+/* ===========================
+   ✅ Container: Mobile-friendly
+   =========================== */
 .container{
-  width: min(1000px, calc(100% - 40px));
-  margin: 50px auto;
+  width: min(1000px, calc(100% - 32px));
+  margin: 28px auto;
+}
+
+/* ลดขอบบนมือถือ + กันล้น */
+@media (max-width: 640px){
+  .container{
+    width: calc(100% - 20px);
+    margin: 18px auto;
+  }
 }
 
 .card{
@@ -46,7 +57,7 @@ body{
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 26px 32px;
-  margin-bottom: 26px;
+  margin-bottom: 22px;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
@@ -61,12 +72,14 @@ body{
   margin:0;
   font-size: 28px;
   letter-spacing: .2px;
+  line-height: 1.25;
 }
 
 .card-subtitle{
   margin:6px 0 0;
   color: var(--muted);
   font-size: 14px;
+  line-height: 1.45;
 }
 
 .card-body{ padding: 4px; }
@@ -81,8 +94,9 @@ body{
 
 @media (max-width: 820px){
   .grid-2{ grid-template-columns: 1fr; }
-  .card{ padding: 20px 18px; border-radius: 22px; }
+  .card{ padding: 18px 16px; border-radius: 22px; }
   .card-title{ font-size: 22px; }
+  .card-body{ padding: 0; }
 }
 
 .box{
@@ -91,6 +105,10 @@ body{
   border-radius: 22px;
   padding: 18px 18px;
   box-shadow: 0 10px 22px rgba(18,38,63,.06);
+}
+
+@media (max-width: 640px){
+  .box{ padding: 14px 14px; border-radius: 18px; }
 }
 
 label{
@@ -120,7 +138,7 @@ input:focus, select:focus{
 
 .actions{
   display:flex;
-  gap: 14px;
+  gap: 12px;
   margin-top: 16px;
   flex-wrap:wrap;
 }
@@ -157,6 +175,14 @@ input:focus, select:focus{
   box-shadow: 0 10px 20px rgba(18,38,63,.06);
 }
 
+@media (max-width: 640px){
+  .btn{
+    width: 100%;
+    justify-content: center;
+    padding: 12px 16px;
+  }
+}
+
 .msg{
   margin-top: 12px;
   padding: 12px 14px;
@@ -181,7 +207,7 @@ input:focus, select:focus{
 
 /* ===========================
    ✅ Survey (แนวนอน 4 ปุ่ม)
-   รองรับ buildSurvey() ตัวใหม่
+   ปรับใหม่ให้ fit มือถือแบบชัวร์
    =========================== */
 
 .survey-item{
@@ -193,10 +219,18 @@ input:focus, select:focus{
   margin-bottom: 16px;
 }
 
+@media (max-width: 640px){
+  .survey-item{
+    padding: 14px 14px;
+    border-radius: 18px;
+  }
+}
+
 .survey-q{
   font-weight: 900;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   line-height: 1.45;
+  font-size: 15px;
 }
 
 .survey-row{
@@ -207,8 +241,8 @@ input:focus, select:focus{
 
 .survey-options.horizontal-4{
   display: grid;
-  grid-template-columns: repeat(4, minmax(110px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* ✅ ไม่บังคับ 110px แล้ว */
+  gap: 10px;
 }
 
 /* ปุ่มตอบแบบ pill */
@@ -217,7 +251,8 @@ input:focus, select:focus{
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 12px;
+
+  padding: 10px 10px;
   border-radius: 999px;
   border: 1px solid #dfe8f5;
   background: #fbfdff;
@@ -267,9 +302,16 @@ input:focus, select:focus{
   box-shadow: 0 10px 18px rgba(47,116,255,.12);
 }
 
-/* responsive */
+/* ✅ mobile: 2 คอลัมน์พอดีจอ */
 @media (max-width: 640px){
   .survey-options.horizontal-4{
-    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ✅ small mobile: 1 คอลัมน์ (จอแคบมากๆ) */
+@media (max-width: 360px){
+  .survey-options.horizontal-4{
+    grid-template-columns: 1fr;
   }
 }
