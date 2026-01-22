@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>แบบสอบถามความพึงพอใจผู้ปกครอง</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">แบบสอบถามความพึงพอใจของผู้ปกครอง</h1>
+        <p class="card-subtitle">กรุณากรอกข้อมูลนักเรียนเพื่อเริ่มทำแบบสอบถาม</p>
+      </div>
+
+      <div class="card-body">
+        <div class="grid grid-2">
+          <div class="box">
+            <label>ชื่อ</label>
+            <input id="stuFirst" type="text" placeholder="เช่น เด็กชาย..." />
+          </div>
+
+          <div class="box">
+            <label>นามสกุล</label>
+            <input id="stuLast" type="text" placeholder="เช่น ใจดี" />
+          </div>
+
+          <div class="box">
+            <label>ชั้น</label>
+            <select id="stuClass">
+              <option value="">-- เลือกชั้น --</option>
+
+              <option value="อ.เตรียม">อ.เตรียม</option>
+              <option value="อนุบาล 1">อนุบาล 1</option>
+              <option value="อนุบาล 2">อนุบาล 2</option>
+              <option value="อนุบาล 3">อนุบาล 3</option>
+
+              <option value="ป.1">ป.1</option>
+              <option value="ป.2">ป.2</option>
+              <option value="ป.3">ป.3</option>
+              <option value="ป.4">ป.4</option>
+              <option value="ป.5">ป.5</option>
+              <option value="ป.6">ป.6</option>
+
+              <option value="ม.1">ม.1</option>
+              <option value="ม.2">ม.2</option>
+              <option value="ม.3">ม.3</option>
+            </select>
+          </div>
+
+          <div class="box">
+            <label>ห้อง</label>
+            <input id="stuRoom" type="text" inputmode="numeric" placeholder="เช่น 1" />
+          </div>
+        </div>
+
+        <div id="msg" class="msg" style="display:none;"></div>
+
+        <div class="actions">
+          <button id="btnGo" class="btn btn-primary">ดำเนินการ</button>
+          <button id="btnClear" class="btn btn-outline" type="button">ล้างค่า</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const msgEl = document.getElementById("msg");
+    const firstEl = document.getElementById("stuFirst");
+    const lastEl  = document.getElementById("stuLast");
+    const classEl = document.getElementById("stuClass");
+    const roomEl  = document.getElementById("stuRoom");
+
+    function showMsg(text){
+      msgEl.style.display = "block";
+      msgEl.textContent = text;
+    }
+    function hideMsg(){
+      msgEl.style.display = "none";
+      msgEl.textContent = "";
+    }
+
+    roomEl.addEventListener("input", ()=>{
+      roomEl.value = roomEl.value.replace(/\D/g,"").slice(0,2);
+      hideMsg();
+    });
+
+    [firstEl,lastEl].forEach(el=>el.addEventListener("input", hideMsg));
+    classEl.addEventListener("change", hideMsg);
+
+    document.getElementById("btnGo").addEventListener("click", ()=>{
+      const first = (firstEl.value || "").trim();
+      const last  = (lastEl.value || "").trim();
+      const cls   = (classEl.value || "").trim();
+      const room  = (roomEl.value || "").trim();
+
+      if(!first) return showMsg("⚠️ กรุณากรอกชื่อ");
+      if(!last)  return showMsg("⚠️ กรุณากรอกนามสกุล");
+      if(!cls)   return showMsg("⚠️ กรุณาเลือกชั้น");
+      if(!room)  return showMsg("⚠️ กรุณากรอกห้อง");
+      if(!/^\d{1,2}$/.test(room)) return showMsg("⚠️ ห้องไม่ถูกต้อง");
+
+      const student = {
+        firstName: first,
+        lastName: last,
+        classroom: cls,
+        room: room
+      };
+      localStorage.setItem("student_manual", JSON.stringify(student));
+
+      location.href = `parent-info.html`;
+    });
+
+    document.getElementById("btnClear").addEventListener("click", ()=>{
+      firstEl.value = "";
+      lastEl.value  = "";
+      classEl.value = "";
+      roomEl.value  = "";
+      hideMsg();
+      firstEl.focus();
+    });
+  </script>
+</body>
+</html>

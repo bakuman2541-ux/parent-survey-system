@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ข้อมูลผู้ปกครอง</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ✅ Parent info (แยกหน้าแล้ว ไม่มีข้อมูลนักเรียนในหน้านี้) -->
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">ข้อมูลผู้ปกครอง</h1>
+        <p class="card-subtitle">กรุณากรอกข้อมูลผู้ปกครองให้ครบถ้วนเพื่อไปทำแบบสอบถาม</p>
+      </div>
+
+      <div class="card-body">
+        <div class="grid grid-2">
+
+          <div class="box">
+            <label>ชื่อบิดา-มารดา / ผู้ปกครอง</label>
+            <input id="parentName" type="text" placeholder="เช่น นาย... / นาง... / น.ส...." />
+          </div>
+
+          <div class="box">
+            <label>อาชีพ</label>
+            <input id="parentJob" type="text" placeholder="เช่น รับราชการ / ค้าขาย / รับจ้าง" />
+          </div>
+
+          <div class="box">
+            <label>เบอร์โทรศัพท์</label>
+            <input id="parentPhone" type="text" inputmode="numeric" placeholder="เช่น 08xxxxxxxx" />
+          </div>
+
+          <div class="box">
+            <label>นักเรียนอาศัยอยู่กับใคร</label>
+            <select id="livingWith">
+              <option value="">-- เลือก --</option>
+              <option value="บิดา">บิดา</option>
+              <option value="มารดา">มารดา</option>
+              <option value="บิดา-มารดา">บิดา-มารดา</option>
+              <option value="ญาติ">ญาติ</option>
+              <option value="ผู้ปกครองอื่น">ผู้ปกครองอื่น</option>
+            </select>
+          </div>
+
+          <div class="box" style="grid-column: 1 / -1;">
+            <label>ที่อยู่</label>
+            <div class="grid grid-2" style="margin-top:10px;">
+
+              <div>
+                <label>บ้านเลขที่</label>
+                <input id="addrNo" type="text" placeholder="เช่น 99/1" />
+              </div>
+
+              <div>
+                <label>หมู่</label>
+                <input id="addrMoo" type="text" placeholder="เช่น 3" />
+              </div>
+
+              <div>
+                <label>ตำบล</label>
+                <input id="addrTambon" type="text" placeholder="เช่น ต.เขาน้อย" />
+              </div>
+
+              <div>
+                <label>อำเภอ</label>
+                <input id="addrAmphoe" type="text" placeholder="เช่น อ.เมือง" />
+              </div>
+
+              <div>
+                <label>จังหวัด</label>
+                <input id="addrProvince" type="text" placeholder="เช่น เพชรบูรณ์" />
+              </div>
+
+              <div>
+                <label>เลขไปรษณีย์</label>
+                <input id="addrZip" type="text" inputmode="numeric" maxlength="5" placeholder="เช่น 67160" />
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div id="formMsg" class="msg" style="display:none;"></div>
+
+        <div class="actions">
+          <button id="btnNext" class="btn btn-primary" disabled>ถัดไปทำแบบสอบถาม</button>
+          <button id="btnBack" class="btn btn-outline" type="button">ย้อนกลับ</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // =====================
+    // ✅ Utilities
+    // =====================
+    const $ = (id) => document.getElementById(id);
+
+    function showMsg(text){
+      const el = $("formMsg");
+      el.style.display = "block";
+      el.textContent = text;
+    }
+    function hideMsg(){
+      const el = $("formMsg");
+      el.style.display = "none";
+      el.textContent = "";
+    }
+
+    // =====================
+    // ✅ Check student exists (มาจากหน้า index)
+    // =====================
+    let student = {};
+    try{
+      student = JSON.parse(localStorage.getItem("student_manual") || "{}");
+    }catch(e){ student = {}; }
+
+    if(!student.firstName || !student.lastName || !student.classroom || !student.room){
+      alert("กรุณากรอกข้อมูลนักเรียนก่อน");
+      location.href = "index.html";
+    }
+
+    // =====================
+    // ✅ Validate Parent Form
+    // =====================
+    function validate(){
+      hideMsg();
+
+      const parentName = ($("parentName").value || "").trim();
+      const parentJob  = ($("parentJob").value || "").trim();
+      const parentPhone= ($("parentPhone").value || "").trim();
+      const livingWith = ($("livingWith").value || "").trim();
+
+      const addrNo     = ($("addrNo").value || "").trim();
+      const addrMoo    = ($("addrMoo").value || "").trim();
+      const addrTambon = ($("addrTambon").value || "").trim();
+      const addrAmphoe = ($("addrAmphoe").value || "").trim();
+      const addrProv   = ($("addrProvince").value || "").trim();
+      const addrZip    = ($("addrZip").value || "").trim();
+
+      const ok =
+        parentName && parentJob && parentPhone && livingWith &&
+        addrNo && addrMoo && addrTambon && addrAmphoe && addrProv && addrZip &&
+        /^0\d{9}$/.test(parentPhone) &&
+        /^\d{5}$/.test(addrZip);
+
+      $("btnNext").disabled = !ok;
+      return ok;
+    }
+
+    // =====================
+    // ✅ Events
+    // =====================
+    $("parentPhone").addEventListener("input", (e)=>{
+      e.target.value = e.target.value.replace(/\D/g, "").slice(0, 10);
+      validate();
+    });
+
+    $("addrZip").addEventListener("input", (e)=>{
+      e.target.value = e.target.value.replace(/\D/g, "").slice(0, 5);
+      validate();
+    });
+
+    [
+      "parentName","parentJob","livingWith",
+      "addrNo","addrMoo","addrTambon","addrAmphoe","addrProvince"
+    ].forEach(id=>{
+      $(id).addEventListener("input", validate);
+      $(id).addEventListener("change", validate);
+    });
+
+    // =====================
+    // ✅ Buttons
+    // =====================
+    $("btnBack").addEventListener("click", ()=>{
+      location.href = "index.html";
+    });
+
+    $("btnNext").addEventListener("click", ()=>{
+      const ok = validate();
+      if(!ok){
+        showMsg("⚠️ กรุณากรอกข้อมูลให้ครบ และตรวจสอบเบอร์โทร/รหัสไปรษณีย์ให้ถูกต้อง");
+        return;
+      }
+
+      const parentInfo = {
+        parentName: ($("parentName").value || "").trim(),
+        parentJob: ($("parentJob").value || "").trim(),
+        parentPhone: ($("parentPhone").value || "").trim(),
+        livingWith: ($("livingWith").value || "").trim(),
+        address: {
+          houseNo: ($("addrNo").value || "").trim(),
+          moo: ($("addrMoo").value || "").trim(),
+          tambon: ($("addrTambon").value || "").trim(),
+          amphoe: ($("addrAmphoe").value || "").trim(),
+          province: ($("addrProvince").value || "").trim(),
+          zipcode: ($("addrZip").value || "").trim(),
+        }
+      };
+
+      localStorage.setItem("parent_info", JSON.stringify(parentInfo));
+      location.href = "survey.html";
+    });
+
+    // first validate
+    validate();
+  </script>
+</body>
+</html>
