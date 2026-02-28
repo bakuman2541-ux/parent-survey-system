@@ -1,8 +1,7 @@
 /******************************
  * ✅ CONFIG (API_URL Web App)
  ******************************/
-const API_URL = "https://script.google.com/macros/s/AKfycbxzC-PhAnNCe9t99km0J188UoMCnjzwt4CKSIsnu9VrduWwebfAi2GCnC_hXIAN8I66/exec";
-
+const API_URL = "https://script.google.com/macros/s/AKfycbyC7V_y1GsPbk9PkuwBH-IWZsryZ6ze1K55p_gPIqdnF9_WfZuMS4O0l38yZC681KH1/exec";
 /******************************
  * ✅ Survey Questions
  * - q1..q7 = scale (4 ระดับ)
@@ -228,3 +227,4 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const page = (location.pathname.split("/").pop() || "").toLowerCase();
   if(page === "survey.html") initSurveyPage();
 });
+
